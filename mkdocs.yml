@@ -1,0 +1,19 @@
+site_name: GenerativeInterface
+site_description: Interface to interact with several generative models.
+site_author: Francisco Caetano
+
+#repo_url:
+
+theme:
+    name: 'material'
+    locale: en
+    font: false
+
+nav:
+    - Home: index.md
+
+# WIP
+#markdown_extensions:
+#  - mkautodoc
+#plugins:
+#  - mkdocs-jupyter
