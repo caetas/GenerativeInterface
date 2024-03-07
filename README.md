@@ -29,7 +29,7 @@ You will need:
 
 Clone this repository (requires git ssh keys)
 
-    git clone --recursive <ssh link>
+    git clone --recursive git@github.com:caetas/GenerativeInterface.git
     cd generativeinterface
 
 Install dependencies
@@ -42,9 +42,34 @@ or if environment already exists
     conda env create -f environment.yml
     conda activate python3.9
 
+### On Linux
+
 And then setup all virtualenv using make file recipe
 
-    (3.9) $ make setup-all
+    (python3.9) $ make setup-all
+
+You might be required to run the following command once to setup the automatic activation of the conda environment and the virtualenv:
+
+    direnv allow
+
+Feel free to edit the [`.envrc`](.envrc) file if you prefer to activate the environments manually.
+
+### On Windows
+
+You can setup the virtualenv by running the following commands:
+
+    python -m venv .venv-dev
+    .venv-dev/Scripts/Activate.ps1
+    python -m pip install --upgrade pip setuptools
+    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+    python -m pip install -r requirements/requirements-win.txt
+
+To run the code please remember to always activate both environments:
+
+    conda activate python3.9
+    .venv-dev/Scripts/Activate.ps1
+
+## Models
 
 ## Documentation
 
