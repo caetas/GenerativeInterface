@@ -1,19 +1,21 @@
+<p align="center">
+  <img src="data/raw/logo_tasti_light.png" width="70%" alt='Tasti Project'>
+</p>
+
 # Generative Interface
 
-[![Python](https://img.shields.io/badge/python-3.7+-informational.svg)]()
+[![Python](https://img.shields.io/badge/python-3.9+-informational.svg)](https://www.python.org/downloads/release/python-3918/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=black)](https://pycqa.github.io/isort)
 [![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://mkdocstrings.github.io)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![mlflow](https://img.shields.io/badge/tracking-mlflow-blue)](https://mlflow.org)
+[![wandb](https://img.shields.io/badge/tracking-wandb-blue)](https://wandb.ai/site)
 [![dvc](https://img.shields.io/badge/data-dvc-9cf)](https://dvc.org)
 [![Hydra](https://img.shields.io/badge/Config-Hydra-89b8cd)](https://hydra.cc)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
-[![pytest](https://img.shields.io/badge/pytest-enabled-brightgreen)](https://github.com/pytest-dev/pytest)
-[![conventional-commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow)](https://github.com/commitizen-tools/commitizen)
 
 Interface to interact with several generative models.
+
+**This work is part of the Xecs TASTI project, nr. 2022005.**
 
 ## Prerequisites
 
@@ -69,7 +71,55 @@ To run the code please remember to always activate both environments:
     conda activate python3.9
     .venv-dev/Scripts/Activate.ps1
 
-## Models
+## Run the Interfaces
+
+### Text-to-Image Latent Diffusion
+
+If you are using a Nvidia GPU that supports `fp16` operations, make sure that the code in [`SD2.py`](src/generativeinterface/SD2.py) looks like this:
+
+```python
+def create_pipeline():
+    #pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1", safety_checker = None)
+    pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1", safety_checker = None, torch_dtype = torch.float16).to("cuda")
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe.enable_sequential_cpu_offload()
+    return pipe
+```
+
+If you have more than 6GB of VRAM available, you can comment the following line as well:
+
+```python
+pipe.enable_sequential_cpu_offload()
+```
+
+To create the interface, please run the following commands:
+
+    cd src/generativeinterface
+    streamlit run SD2.py
+
+### Text-To-Image Inpainting
+
+If you are using a Nvidia GPU that supports `fp16` operations, make sure that the code in [`Inpaint_SD.py`](src/generativeinterface/Inpaint_SD.py) looks like this:
+
+```python
+def create_pipeline():
+    #pipe = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting", safety_checker = None)
+    pipe = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting", safety_checker = None, torch_dtype = torch.float16).to("cuda")
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe.enable_sequential_cpu_offload()
+    return pipe
+```
+
+If you have more than 6GB of VRAM available, you can comment the following line as well:
+
+```python
+pipe.enable_sequential_cpu_offload()
+```
+
+To create the interface, please run the following commands:
+
+    cd src/generativeinterface
+    streamlit run Inpaint_SD.py
 
 ## Documentation
 
@@ -84,28 +134,14 @@ See the [Developer](docs/DEVELOPER.md) guidelines for more information.
 Contributions of any kind are welcome. Please read [CONTRIBUTING.md](docs/CONTRIBUTING.md]) for details and
 the process for submitting pull requests to us.
 
-## Changelog
-
-See the [Changelog](CHANGELOG.md) for more information.
-
-## Security
-
-Thank you for improving the security of the project, please see the [Security Policy](docs/SECURITY.md)
-for more information.
-
 ## License
 
 This project is licensed under the terms of the `MIT` license.
 See [LICENSE](LICENSE) for more details.
 
-## Citation
+## References
 
-If you publish work that uses Generative Interface, please cite Generative Interface as follows:
+This work is based on the tutorials and documentation provided by [HuggingFace](https://huggingface.co/) and the [Diffusers](https://github.com/huggingface/diffusers) library:
 
-```bibtex
-@misc{Generative Interface,
-  author = {TU/e},
-  title = {Interface to interact with several generative models.},
-  year = {2024},
-}
-```
+- [Stable Diffusion 2.1](https://huggingface.co/stabilityai/stable-diffusion-2-1)
+- [Stable Diffusion Inpainting](https://huggingface.co/runwayml/stable-diffusion-inpainting)
