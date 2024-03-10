@@ -17,3 +17,4 @@ peft
 streamlit-drawable-canvas
 matplotlib
 scipy
+opencv-python
