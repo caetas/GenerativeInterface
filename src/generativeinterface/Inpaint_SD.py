@@ -12,8 +12,8 @@ st.set_page_config(page_title='Inpainting', page_icon=Image.open(os.path.join("i
 
 @st.cache_resource
 def create_pipeline():
-    pipe = StableDiffusionInpaintPipeline.from_pretrained("stabilityai/stable-diffusion-2-inpainting", safety_checker = None)
-    #pipe = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting", safety_checker = None, torch_dtype = torch.float16).to("cuda")
+    #pipe = StableDiffusionInpaintPipeline.from_pretrained("stabilityai/stable-diffusion-2-inpainting", safety_checker = None)
+    pipe = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting", safety_checker = None, torch_dtype = torch.float16).to("cuda")
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_sequential_cpu_offload()
     return pipe
@@ -51,7 +51,7 @@ pipe = create_pipeline()
 imgs, prompts = load_base_imgs()
 
 # upload an image as well
-st.markdown("## Upload an Image")
+st.markdown("## Choose an Image to Inpaint")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 # if the user uploads an image, save it to the imgs list and prompts list
 if uploaded_file is not None:
@@ -65,7 +65,8 @@ initial_prompt = prompts[imgs.index(init_image)]
 init_image = init_image.resize((512, 512))
 
 # create drawable canvas with the init image in the background that we can draw on to create the mask, fill color is white, background color is black
-st.text("Draw on the image to create the mask")
+st.markdown("## Draw a Mask")
+st.markdown("Draw a large mask on the areas you want to inpaint.")
 mask_image = st_canvas(background_image=init_image, drawing_mode="freedraw", key="canvas", fill_color="rgb(0, 0, 0)", stroke_width=40, stroke_color="rgb(255, 255, 255)", update_streamlit=True, height=700, width=700)
 prompt = st.text_input("Prompt", initial_prompt, help="The prompt to guide the generation of the image, i.e., what you want the model to generate")
 num_inference_steps = st.slider("Number of Inference Steps", 10, 100, 20, help="The number of steps the model takes to generate the image. Higher values result in better quality images but take longer to generate.")
