@@ -26,6 +26,7 @@ You will need:
 - `Make`
 - a `.secrets` file with the required secrets and credentials
 - load environment variables from `.env`
+- `CUDA >= 12.1`
 
 ## Installation
 
