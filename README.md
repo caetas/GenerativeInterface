@@ -121,6 +121,32 @@ To create the interface, please run the following commands:
     cd src/generativeinterface
     streamlit run Inpaint_SD.py
 
+### ControlNet
+
+If you are using a Nvidia GPU that supports `fp16` operations, make sure that the code in [`Control_SD.py`](src/generativeinterface/Control_SD.py) looks like this:
+
+```python
+def create_pipeline():
+    #controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble")
+    #pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None)
+    controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble", torch_dtype=torch.float16)
+    pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None, torch_dtype=torch.float16)
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe.enable_sequential_cpu_offload()
+    return pipe
+```
+
+If you have more than 6GB of VRAM available, you can comment the following line as well:
+
+```python
+pipe.enable_sequential_cpu_offload()
+```
+
+To create the interface, please run the following commands:
+
+    cd src/generativeinterface
+    streamlit run Control_SD.py
+
 ## Documentation
 
 Full documentation is available here: [`docs/`](docs).

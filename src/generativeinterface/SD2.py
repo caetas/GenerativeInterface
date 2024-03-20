@@ -10,8 +10,8 @@ st.set_page_config(page_title='Stable Diffusion 2', page_icon=Image.open(os.path
 
 @st.cache_resource
 def create_pipeline():
-    pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1", safety_checker = None)
-    #pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1", safety_checker = None, torch_dtype = torch.float16).to("cuda")
+    #pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1", safety_checker = None)
+    pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1", safety_checker = None, torch_dtype = torch.float16).to("cuda")
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_sequential_cpu_offload()
     return pipe

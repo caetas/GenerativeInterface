@@ -81,7 +81,8 @@ if init_image.mode != "RGB":
     init_image = init_image.convert("RGB")
 
 # create drawable canvas with the init image in the background that we can draw on to create the mask, fill color is white, background color is black
-st.text("Draw on the image to create the mask")
+st.markdown("## Draw a Mask")
+st.markdown("Draw a large mask on the areas you want to inpaint.")
 mask_image = st_canvas(background_image=init_image, drawing_mode="freedraw", key="canvas", fill_color="rgb(0, 0, 0)", stroke_width=40, stroke_color="rgb(255, 255, 255)", update_streamlit=True, height=700, width=700)
 prompt = st.text_input("Prompt", initial_prompt, help="The prompt to guide the generation of the image, i.e., what you want the model to generate")
 negative_prompt = st.text_input("Negative Prompt", "synthetic looking", help="The negative prompt to guide the generation of the image, i.e., what you don't want the model to generate")
