@@ -12,10 +12,10 @@ st.set_page_config(page_title='ControlNet', page_icon=Image.open(os.path.join("i
 
 @st.cache_resource
 def create_pipeline():
-    #controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble")
-    #pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None)
-    controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble", torch_dtype=torch.float16)
-    pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None, torch_dtype=torch.float16)
+    controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble")
+    pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None)
+    #controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble", torch_dtype=torch.float16)
+    #pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None, torch_dtype=torch.float16)
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_sequential_cpu_offload()
     return pipe
